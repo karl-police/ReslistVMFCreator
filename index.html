@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reslist VMF Creator</title>
+    <!--<script src="./js/JSON2_modified.js"></script>-->
+    <script src="./js/vmf_unparser.js"></script>
+    <script src="./js/ReslistVMF_Module.js"></script>
+</head>
+<body>
+    <h1>Reslist VMF Creator</h1>
+
+    <form>
+        <div>
+            <h2>Material Filter</h2>
+            <div id="config_material_checkboxes"></div>
+        </div>
+        <hr>
+        <div>
+            <!-- file input -->
+            <input type="file" id="reslistFileInput" name="reslistFile" accept=".lst,.txt">
+        </div>
+    </form>
+
+    <!-- result -->
+    <textarea id="result"></textarea>
+    <script>
+        /*class MaterialConfig {
+            checkbox = class {
+                constructor(table) {
+                    Object.assign(this, table)
+                }
+
+                value = undefined
+                defaultChecked = false
+            }
+            checkboxes = []
+            
+            addCheckbox(table) {
+                let addingIndex = Object.keys(this.checkboxes).length
+
+                Object.assign(this.checkboxes, {[addingIndex]: new this.checkbox(table)})
+            }
+        }
+
+        const materialConfig = new MaterialConfig()
+
+        materialConfig.addCheckbox({
+            value: "particle\\",
+            defaultChecked: true
+        })*/
+
+        const materialCheckboxes = [
+            {
+                value: "particle\\",
+                defaultChecked: true
+            },
+            {
+                value: "cable\\",
+                defaultChecked: true
+            },
+            {
+                value: "debug\\",
+                defaultChecked: true
+            },
+            {
+                value: "models\\",
+                defaultChecked: true
+            },
+            {
+                value: "engine\\",
+                defaultChecked: true
+            },
+            {
+                value: "shadertest\\",
+                defaultChecked: true
+            },
+            {
+                value: "tools\\",
+                defaultChecked: true
+            }, {value: "dev\\"}, {value: "hud\\"}, {value: "effects\\"}, {value: "vgui\\"}, {value: "sprites\\"}, {value: "decals\\"}
+        ]
+        
+
+        var html_materialCheckboxes = document.getElementById("config_material_checkboxes")
+
+        // To generate checkboxes
+        function initMaterialConfig() {
+            let documentFragment = document.createDocumentFragment()
+
+            for (i=0; i < materialCheckboxes.length; i++) {
+                let checkboxHTML_span = document.createElement("span")
+                let checkboxHTML_checkbox = document.createElement("input")
+                
+                checkboxHTML_span.innerText = materialCheckboxes[i].value
+
+                checkboxHTML_checkbox.type = "checkbox"
+                checkboxHTML_checkbox.checked = materialCheckboxes[i].defaultChecked ? true : false
+                checkboxHTML_checkbox.value = materialCheckboxes[i].value
+
+                // Append
+                documentFragment.append(checkboxHTML_span)
+                documentFragment.append(checkboxHTML_checkbox)
+                documentFragment.append(document.createElement("br"))
+            }
+
+            html_materialCheckboxes.append(documentFragment)
+        }
+
+        initMaterialConfig()
+
+
+        function getCheckboxes(element) {
+            const values = []
+
+            var inputElements = element.getElementsByTagName("input")
+
+            for (i=0; i < inputElements.length; i++) {
+                if (inputElements[i].type == "checkbox") {
+                    values.push(inputElements[i])
+                }
+            }
+
+            return values
+        }
+
+        function generateOptions() {
+            const options = new ReslistVMF_Module.createVMFfromReslist_options()
+
+            var materialCheckboxes = getCheckboxes(html_materialCheckboxes)
+
+            for (i=0; i < materialCheckboxes.length; i++) {
+                if (materialCheckboxes[i].checked == true) {
+                    options.materialBlacklistArray.push(materialCheckboxes[i].value)
+                }
+            }
+
+            return options
+        }
+
+
+        const reslistFileInputElement = document.getElementById("reslistFileInput")
+
+        reslistFileInputElement.onchange = function() {
+            let fileInput = this.files[0]
+            let text = fileInput.text() // Returns a Promise
+
+            let options = generateOptions()
+            console.log(options)
+
+            text.then(function(t) {
+                ReslistVMF_Module.createVMFfromReslist(t, options)
+            })
+        }
+        
+        /*reslistFileInputElement.onchange = function() {
+            this.files[0].text().then(function(t) { 
+                ReslistVMF_Module.createVMFfromReslist(t)
+            })
+        }*/       
+    </script>
+</body>
+</html>
