@@ -148,7 +148,6 @@
             let text = fileInput.text() // Returns a Promise
 
             let options = generateOptions()
-            console.log(options)
 
             text.then(function(t) {
                 ReslistVMF_Module.createVMFfromReslist(t, options)
