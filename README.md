@@ -2,6 +2,8 @@
 
 A modified and improved tool based on litexev's "Reslist map generator" inteded for Portal 2 left over reslist files.
 
+Link: https://karl-police.github.io/ReslistVMFGenerator/
+
 
 It allows you to upload a .lst file which will output a text that you then can put in a blank .vmf file and inserting the content inside of it.
 
